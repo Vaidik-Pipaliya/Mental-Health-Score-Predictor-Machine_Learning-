@@ -1,0 +1,21 @@
+# Excluded notebook solutions and exported HTML
+ML_Project_solution.ipynb
+ML Project.html
+*.html
+
+# System & IDE files
+.kilo/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Jupyter Checkpoints & Python artifacts
+.ipynb_checkpoints/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Saved model artifacts (Part 2)
+*.pkl
+*.joblib
