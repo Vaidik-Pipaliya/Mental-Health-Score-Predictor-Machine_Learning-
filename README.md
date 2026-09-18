@@ -234,12 +234,15 @@ Two primary paradigms were constructed and compared on identical $70/30$ train/t
 
 | Model Architecture | Training $R^2$ | Testing $R^2$ | Test MAE | Test RMSE | Inference Efficiency |
 | :--- | :---: | :---: | :---: | :---: | :---: |
-| **Linear Regression (Baseline)** | $72.37\%$ | **$73.98\%$** | $0.5362$ | $0.6551$ | $< 1\text{ ms}$ |
-| **Random Forest Regressor** | $98.08\%$ | **$87.76\%$** | **$0.3472$** | **$0.4637$** | $\approx 15\text{ ms}$ |
+| **Linear Regression (Baseline)** | $72.37\%$ | **$73.98\%$** | $0.5362$ | $0.6760$ | $< 1\text{ ms}$ |
+| **Random Forest (Default)** | $98.08\%$ | **$87.76\%$** | **$0.3472$** | **$0.4637$** | $\approx 15\text{ ms}$ |
+| **Random Forest (Tuned via RandomizedSearchCV)** | $95.47\%$ | **$86.50\%$** | $0.3689$ | $0.4869$ | $\approx 12\text{ ms}$ |
 
 ### Evaluation Insights:
-- **Ensemble Dominance:** `RandomForestRegressor` improves variance explanation by **$+13.78\%$** ($R^2 = 87.76\%$) over linear regression, dropping mean absolute error down to **$0.347$ score points**.
+- **Ensemble Dominance:** `RandomForestRegressor` improves variance explanation by **$+13.78\%$** ($R^2 = 87.76\%$) over linear regression, reducing test mean absolute error to **$0.347$ score points**.
+- **Regularization & Generalization:** Hyperparameter tuning via `RandomizedSearchCV` (`max_depth`, `min_samples_leaf`, `min_samples_split`) successfully regularized the model, bringing training $R^2$ down from $98.08\%$ to $95.47\%$ to mitigate overfitting while maintaining a strong $86.50\%$ test $R^2$.
 - **Non-Linear Interactions:** Non-linear decision trees capture intricate threshold effects (such as the sudden steep penalty when daily usage exceeds $5$ hours combined with sleep deprivation).
+- **Saved Pipeline:** The complete end-to-end preprocessing + model pipeline is exported via `joblib.dump(rf_pipeline, 'mental_health_MODEL.pkl')` for deployment.
 
 ---
 
@@ -306,9 +309,9 @@ jupyter notebook ML_Project.ipynb
 - [x] **Phase 3: Machine Learning Model Construction**
   - [x] Baseline `LinearRegression` pipeline ($R^2 = 74.0\%$)
   - [x] Ensemble `RandomForestRegressor` pipeline ($R^2 = 87.8\%$)
-  - [x] Hyperparameter exploration via `RandomizedSearchCV`
+  - [x] Hyperparameter exploration via `RandomizedSearchCV` ($R^2 = 86.5\%$)
+  - [x] Model serialization (`mental_health_MODEL.pkl`)
 - [ ] **Phase 4: Productionization & Serving (Part 2)**
-  - [ ] Pipeline export to standalone `.joblib` / `.pkl` bundle
   - [ ] FastAPI backend microservice with Pydantic payload validation
   - [ ] Interactive Streamlit or React web dashboard for instant self-assessment
   - [ ] Model explainability using SHAP (SHapley Additive exPlanations)
